@@ -196,8 +196,9 @@
             this.btnApplyFiltered.Name = "btnApplyFiltered";
             this.btnApplyFiltered.Size = new System.Drawing.Size(117, 30);
             this.btnApplyFiltered.TabIndex = 25;
-            this.btnApplyFiltered.Text = "Apply to &Filtered";
+            this.btnApplyFiltered.Text = "Apply to &Filtered...";
             this.btnApplyFiltered.UseVisualStyleBackColor = true;
+            this.btnApplyFiltered.Click += new System.EventHandler(this.btnApplyFiltered_Click);
             // 
             // btnApplyAll
             // 
@@ -205,8 +206,9 @@
             this.btnApplyAll.Name = "btnApplyAll";
             this.btnApplyAll.Size = new System.Drawing.Size(116, 30);
             this.btnApplyAll.TabIndex = 24;
-            this.btnApplyAll.Text = "A&pply to all";
+            this.btnApplyAll.Text = "A&pply to all...";
             this.btnApplyAll.UseVisualStyleBackColor = true;
+            this.btnApplyAll.Click += new System.EventHandler(this.btnApplyAll_Click);
             // 
             // btnDelete
             // 

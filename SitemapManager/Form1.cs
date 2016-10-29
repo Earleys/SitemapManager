@@ -250,6 +250,53 @@ namespace SitemapManager
             tbPriority.Value = Convert.ToInt32(sm.Priority * 10);
         }
 
+        private void btnApplyAll_Click(object sender, EventArgs e)
+        {
+            ApplyChangesToAll(sitemapManager.SitemapList);
+            FinalizeChanges();
+        }
 
+        private void btnApplyFiltered_Click(object sender, EventArgs e)
+        {
+            ApplyChangesToAll(sitemapManager.SitemapListFiltered);
+            FinalizeChanges();
+        }
+
+        private void ApplyChangesToAll(List<Sitemap> source)
+        {
+            using (var form = new ApplyChangesForm(source.Count))
+            {
+                double count = 0;
+                var result = form.ShowDialog();
+                if (form.dialogResult == DialogResult.OK)
+                {
+                    if (form.isUrl)
+                    {
+                        source.Select(sm => { sm.LocationUrl = txtUrl.Text; return sm; }).ToList();
+                        count += sitemapManager.SitemapList.Count;
+                    }
+                    if (form.isModificationDate)
+                    {
+                        source.Select(sm => { sm.LastModified = dtpLastModified.Value; return sm; }).ToList();
+                        count += sitemapManager.SitemapList.Count;
+                    }
+                    if (form.isChangeFrequency)
+                    {
+                        source.Select(sm => { sm.Frequency = (ChangeFrequency)cmbFrequency.SelectedValue; return sm; }).ToList();
+                        count += sitemapManager.SitemapList.Count;
+                    }
+                    if (form.isPriority)
+                    {
+                        source.Select(sm => { sm.Priority = Convert.ToDouble(tbPriority.Value) / 10; ; return sm; }).ToList();
+                        count += sitemapManager.SitemapList.Count;
+                    }
+                    lblStatus.Text = Math.Round(count / 4, 0) + " items out of " + sitemapManager.SitemapList.Count + " in total have had 1 or more changes.";
+                }
+                else
+                {
+                    lblStatus.Text = "No items have been changed.";
+                }
+            }
+        }
     }
 }
