@@ -37,9 +37,9 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.btnApplyFiltered = new System.Windows.Forms.Button();
             this.btnApplyAll = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnDelete = new System.Windows.Forms.Button();
+            this.btnEdit = new System.Windows.Forms.Button();
+            this.btnAdd = new System.Windows.Forms.Button();
             this.tbPriority = new System.Windows.Forms.TrackBar();
             this.cmbFrequency = new System.Windows.Forms.ComboBox();
             this.dtpLastModified = new System.Windows.Forms.DateTimePicker();
@@ -153,6 +153,7 @@
             this.tvResults.Name = "tvResults";
             this.tvResults.Size = new System.Drawing.Size(405, 360);
             this.tvResults.TabIndex = 3;
+            this.tvResults.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvResults_AfterSelect);
             // 
             // tabControl1
             // 
@@ -169,9 +170,9 @@
             // 
             this.tabPage1.Controls.Add(this.btnApplyFiltered);
             this.tabPage1.Controls.Add(this.btnApplyAll);
-            this.tabPage1.Controls.Add(this.button3);
-            this.tabPage1.Controls.Add(this.button2);
-            this.tabPage1.Controls.Add(this.button1);
+            this.tabPage1.Controls.Add(this.btnDelete);
+            this.tabPage1.Controls.Add(this.btnEdit);
+            this.tabPage1.Controls.Add(this.btnAdd);
             this.tabPage1.Controls.Add(this.tbPriority);
             this.tabPage1.Controls.Add(this.cmbFrequency);
             this.tabPage1.Controls.Add(this.dtpLastModified);
@@ -207,32 +208,35 @@
             this.btnApplyAll.Text = "A&pply to all";
             this.btnApplyAll.UseVisualStyleBackColor = true;
             // 
-            // button3
+            // btnDelete
             // 
-            this.button3.Location = new System.Drawing.Point(282, 159);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(74, 33);
-            this.button3.TabIndex = 23;
-            this.button3.Text = "&Delete";
-            this.button3.UseVisualStyleBackColor = true;
+            this.btnDelete.Location = new System.Drawing.Point(282, 159);
+            this.btnDelete.Name = "btnDelete";
+            this.btnDelete.Size = new System.Drawing.Size(74, 33);
+            this.btnDelete.TabIndex = 23;
+            this.btnDelete.Text = "&Delete";
+            this.btnDelete.UseVisualStyleBackColor = true;
+            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             // 
-            // button2
+            // btnEdit
             // 
-            this.button2.Location = new System.Drawing.Point(198, 160);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(78, 32);
-            this.button2.TabIndex = 22;
-            this.button2.Text = "&Edit";
-            this.button2.UseVisualStyleBackColor = true;
+            this.btnEdit.Location = new System.Drawing.Point(198, 160);
+            this.btnEdit.Name = "btnEdit";
+            this.btnEdit.Size = new System.Drawing.Size(78, 32);
+            this.btnEdit.TabIndex = 22;
+            this.btnEdit.Text = "&Edit";
+            this.btnEdit.UseVisualStyleBackColor = true;
+            this.btnEdit.Click += new System.EventHandler(this.btnEdit_Click);
             // 
-            // button1
+            // btnAdd
             // 
-            this.button1.Location = new System.Drawing.Point(117, 159);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 33);
-            this.button1.TabIndex = 21;
-            this.button1.Text = "&Add new";
-            this.button1.UseVisualStyleBackColor = true;
+            this.btnAdd.Location = new System.Drawing.Point(117, 159);
+            this.btnAdd.Name = "btnAdd";
+            this.btnAdd.Size = new System.Drawing.Size(75, 33);
+            this.btnAdd.TabIndex = 21;
+            this.btnAdd.Text = "&Add new";
+            this.btnAdd.UseVisualStyleBackColor = true;
+            this.btnAdd.Click += new System.EventHandler(this.button1_Click);
             // 
             // tbPriority
             // 
@@ -402,7 +406,6 @@
             this.tbFilterPriority.TabIndex = 21;
             this.tbFilterPriority.Value = 1;
             this.tbFilterPriority.ValueChanged += new System.EventHandler(this.chkFilterUrl_CheckedChanged);
-            this.tbFilterPriority.ValueChanged += new System.EventHandler(this.tbPriority_ValueChanged_1);
             // 
             // label11
             // 
@@ -867,9 +870,9 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnDelete;
+        private System.Windows.Forms.Button btnEdit;
+        private System.Windows.Forms.Button btnAdd;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem loadSitemapToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;

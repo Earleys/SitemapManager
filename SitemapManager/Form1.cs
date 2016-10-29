@@ -29,7 +29,7 @@ namespace SitemapManager
             cmbFilterChangeFrequency.DataSource = Enum.GetValues(typeof(ChangeFrequency));
             filterThreadStart = new ThreadStart(ApplyFiltering);
             filterThread = new Thread(filterThreadStart);
-            ((Control)tpFiltering).Enabled = false;
+            ToggleFilteringTab(false);
             UpdatePriorityLabel();
         }
 
@@ -49,7 +49,7 @@ namespace SitemapManager
                 sitemapManager.SitemapList = fileManager.ReadSiteMap(path);
             }
             RefreshTreeView(sitemapManager.SitemapList);
-            ((Control)tpFiltering).Enabled = true;
+            ToggleFilteringTab(true);
         }
 
         private void RefreshTreeView(List<Sitemap> sitemapList)
@@ -65,7 +65,9 @@ namespace SitemapManager
                 tvResults.Nodes[parent].Nodes.Add(item.Priority.ToString());
             }
 
+
             tvResults.EndUpdate();
+
         }
 
         private void tvResults_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
@@ -87,12 +89,17 @@ namespace SitemapManager
             UpdatePriorityLabel();
         }
 
+        private string GetPriority(double priority) {
+            return String.Format("{0:0.0}", priority);
+        }
+
+
         private void UpdatePriorityLabel()
         {
             double value = Convert.ToDouble(tbPriority.Value) / 10;
             double filterValue = Convert.ToDouble(tbFilterPriority.Value) / 10;
-            string finalValue = String.Format("{0:0.0}", value); // makes it so the number will ALWAYS end with '.0'
-            string finalFilterValue = String.Format("{0:0.0}", filterValue);
+            string finalValue = GetPriority(value);
+            string finalFilterValue = GetPriority(filterValue);
             lblPriority.Text = "Priority (" + finalValue + ")";
             lblFilterPriority.Text = "Priority (" + finalFilterValue + ")";
         }
@@ -148,6 +155,11 @@ namespace SitemapManager
 
         private void chkFilterUrl_CheckedChanged(object sender, EventArgs e)
         {
+            ApplyFilteringWhenValid();
+        }
+
+        private void ApplyFilteringWhenValid()
+        {
             bool isAnythingChecked = groupBox1.Controls.OfType<CheckBox>().Any(c => c.Checked);
             isFiltered = isAnythingChecked;
             btnApplyFiltered.Enabled = isAnythingChecked;
@@ -167,5 +179,77 @@ namespace SitemapManager
                 RefreshTreeView(sitemapManager.SitemapList);
             }
         }
+
+        // add
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Sitemap sm = new Sitemap();
+            sm.LocationUrl = txtUrl.Text;
+            sm.LastModified = dtpLastModified.Value.Date;
+            sm.Frequency = (ChangeFrequency)cmbFrequency.SelectedValue;
+            double convertedPriorityValue = Convert.ToDouble(tbPriority.Value) / 10;
+            sm.Priority = Convert.ToDouble(GetPriority(convertedPriorityValue));
+            sitemapManager.SaveSitemapElement(sm);
+            FinalizeChanges();
+        }
+
+
+        private void btnEdit_Click(object sender, EventArgs e)
+        {
+            if (tvResults.SelectedNode != null)
+            {
+                Sitemap sm = sitemapManager.GetSitemapElementByUrl(tvResults.SelectedNode.Name);
+                sm.LocationUrl = txtUrl.Text;
+                sm.LastModified = dtpLastModified.Value;
+                sm.Frequency = (ChangeFrequency)cmbFrequency.SelectedValue;
+                double convertedPriorityValue = Convert.ToDouble(tbPriority.Value) / 10;
+                sm.Priority = Convert.ToDouble(GetPriority(convertedPriorityValue));
+                FinalizeChanges();
+            } else
+            {
+                MessageBox.Show("Unable to make changes. Please select an item from the list first.", "Cannot apply changes", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            if (tvResults.SelectedNode != null)
+            {
+                DialogResult dr = MessageBox.Show("Are you sure you want to delete '" + tvResults.SelectedNode.Name + "' and all of it's child elements completely?", "Are you sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (dr == DialogResult.Yes)
+                {
+                    Sitemap sm = sitemapManager.GetSitemapElementByUrl(tvResults.SelectedNode.Name);
+                    sitemapManager.deleteSitemapElement(sm);
+                    FinalizeChanges();
+                }
+            } else
+            {
+                MessageBox.Show("Unable to delete. Please select an item from the list first.", "Cannot delete", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void FinalizeChanges()
+        {
+            RefreshTreeView(sitemapManager.SitemapList);
+            ApplyFilteringWhenValid();
+            ToggleFilteringTab(true);
+        }
+
+        private void ToggleFilteringTab(bool value)
+        {
+            ((Control)tpFiltering).Enabled = value;
+        }
+
+
+        private void tvResults_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            Sitemap sm = sitemapManager.GetSitemapElementByUrl(e.Node.Name);
+            txtUrl.Text = sm.LocationUrl;
+            dtpLastModified.Value = sm.LastModified;
+            cmbFrequency.SelectedIndex = cmbFrequency.FindString(sm.Frequency.ToString());
+            tbPriority.Value = Convert.ToInt32(sm.Priority * 10);
+        }
+
+
     }
 }

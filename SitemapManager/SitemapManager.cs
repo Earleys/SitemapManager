@@ -35,6 +35,34 @@ namespace SitemapManager
             return SitemapList.Where(x => x.LocationUrl.ToLower() == name.ToLower()).FirstOrDefault();
         }
 
+        public bool SaveSitemapElement(Sitemap sm)
+        {
+            try
+            {
+                SitemapList.Add(sm);
+                return true;
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Error when saving sitemap element");
+                return false;
+            }
+        }
+
+        public bool deleteSitemapElement(Sitemap sm)
+        {
+            try
+            {
+                SitemapList.Remove(sm);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error when deleting sitemap element");
+                return false;
+            }
+        }
+
         public List<Sitemap> Filter(List<Sitemap> source, UrlFilter urlFilter, ModificationDateFilter modificationDateFilter, ChangeFrequencyFilter changeFrequencyFilter, PriorityFilter priorityFilter)
         {
             List<Sitemap> temporaryFilteredSitemapList = new List<Sitemap>();
