@@ -1,20 +1,20 @@
-﻿using SitemapManager.Objects;
+﻿using SitemapManager.DAL.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SitemapManager
+namespace SitemapManager.DAL.Data_Access
 {
-    public class SitemapManager
+    public class SitemapsManager
     {
         //List<Sitemap> _sitemapList = new List<Sitemap>();
         public List<Sitemap> SitemapList { get; set; }
         public List<Sitemap> SitemapListNoDuplicates { get; set; }
         public List<Sitemap> SitemapListFiltered { get; set; }
 
-        public SitemapManager()
+        public SitemapsManager()
         {
             if (SitemapList == null)
             {

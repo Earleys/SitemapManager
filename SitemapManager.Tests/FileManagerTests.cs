@@ -1,10 +1,11 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
-using SitemapManager.Objects;
 using System.Globalization;
 using System.Collections;
 using System.Linq;
+using SitemapManager.DAL.Entities;
+using SitemapManager.DAL.Data_Access;
 
 namespace SitemapManager.Tests
 {

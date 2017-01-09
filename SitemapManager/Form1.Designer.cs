@@ -94,6 +94,7 @@
             this.prioritylowHighToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.priorityhighLowToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.saveSitemapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -749,7 +750,8 @@
             // fileToolStripMenuItem
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.loadSitemapToolStripMenuItem});
+            this.loadSitemapToolStripMenuItem,
+            this.saveSitemapToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "&File";
@@ -757,7 +759,7 @@
             // loadSitemapToolStripMenuItem
             // 
             this.loadSitemapToolStripMenuItem.Name = "loadSitemapToolStripMenuItem";
-            this.loadSitemapToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.loadSitemapToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.loadSitemapToolStripMenuItem.Text = "&Load Sitemap";
             this.loadSitemapToolStripMenuItem.Click += new System.EventHandler(this.loadSitemapToolStripMenuItem_Click);
             // 
@@ -818,6 +820,13 @@
             this.menuStrip1.Size = new System.Drawing.Size(778, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
+            // 
+            // saveSitemapToolStripMenuItem
+            // 
+            this.saveSitemapToolStripMenuItem.Name = "saveSitemapToolStripMenuItem";
+            this.saveSitemapToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.saveSitemapToolStripMenuItem.Text = "Save Sitemap";
+            this.saveSitemapToolStripMenuItem.Click += new System.EventHandler(this.saveSitemapToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -924,6 +933,7 @@
         private System.Windows.Forms.TreeView tvResults;
         private System.Windows.Forms.CheckBox chkFilterPriorityAt;
         private System.Windows.Forms.CheckBox chkFilterModificationDateAt;
+        private System.Windows.Forms.ToolStripMenuItem saveSitemapToolStripMenuItem;
     }
 }
 

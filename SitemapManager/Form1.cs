@@ -1,4 +1,5 @@
-﻿using SitemapManager.Objects;
+﻿using SitemapManager.DAL.Data_Access;
+using SitemapManager.DAL.Entities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,12 +16,13 @@ namespace SitemapManager
 {
     public partial class Form1 : Form
     {
-        SitemapManager sitemapManager = new SitemapManager();
+        SitemapsManager sitemapManager = new SitemapsManager();
         FileManager fileManager = new FileManager();
         Thread filterThread;
         ThreadStart filterThreadStart;
 
         private bool isFiltered = false;
+        private string lastPath = "";
 
         public Form1()
         {
@@ -42,6 +44,7 @@ namespace SitemapManager
             if (ofd.ShowDialog() == DialogResult.OK)
             {
                 path = ofd.FileName;
+                lastPath = path;
             }
 
             if (path != null)
@@ -297,6 +300,24 @@ namespace SitemapManager
                     lblStatus.Text = "No items have been changed.";
                 }
             }
+        }
+
+        private void saveSitemapToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.Filter = "XML File|*.xml";
+            sfd.Title = "Choose where to save the sitemap.";
+            if (lastPath != null || lastPath != "")
+            {
+                sfd.FileName = lastPath;
+            }
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                lastPath = sfd.FileName;
+                var result = fileManager.GenerateSitemap(sitemapManager.SitemapList);
+                fileManager.SaveSitemap(sfd.FileName, result);
+            }
+
         }
     }
 }

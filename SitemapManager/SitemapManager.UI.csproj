@@ -54,14 +54,12 @@
     <Compile Include="ApplyChangesForm.Designer.cs">
       <DependentUpon>ApplyChangesForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="FileManager.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="SitemapManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="ApplyChangesForm.resx">
@@ -94,9 +92,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SitemapManager.Objects\SitemapManager.Objects.csproj">
+    <ProjectReference Include="..\SitemapManager.Objects\SitemapManager.DAL.csproj">
       <Project>{d864d9f1-36b6-45b0-961e-76c088cd7fcb}</Project>
-      <Name>SitemapManager.Objects</Name>
+      <Name>SitemapManager.DAL</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

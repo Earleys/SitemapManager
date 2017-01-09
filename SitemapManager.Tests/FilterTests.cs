@@ -1,7 +1,8 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SitemapManager.Objects;
 using System.Collections.Generic;
+using SitemapManager.DAL.Entities;
+using SitemapManager.DAL.Data_Access;
 
 namespace SitemapManager.Tests
 {
@@ -17,7 +18,7 @@ namespace SitemapManager.Tests
        
 
         Sitemap sitemap = new Sitemap();
-        SitemapManager sitemapManager = new SitemapManager();
+        SitemapsManager sitemapManager = new SitemapsManager();
 
         [TestInitialize]
         public void Initialize()

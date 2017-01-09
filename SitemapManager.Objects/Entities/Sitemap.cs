@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SitemapManager.Objects
+namespace SitemapManager.DAL.Entities
 {
     public class Sitemap
     {

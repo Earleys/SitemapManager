@@ -41,12 +41,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ChangeFrequencyFilter.cs" />
-    <Compile Include="ModificationDateFilter.cs" />
-    <Compile Include="PriorityFilter.cs" />
+    <Compile Include="Data Access\SitemapsManager.cs" />
+    <Compile Include="Entities\ChangeFrequencyFilter.cs" />
+    <Compile Include="Entities\ModificationDateFilter.cs" />
+    <Compile Include="Entities\PriorityFilter.cs" />
+    <Compile Include="Data Access\FileManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Sitemap.cs" />
-    <Compile Include="UrlFilter.cs" />
+    <Compile Include="Entities\Sitemap.cs" />
+    <Compile Include="Entities\UrlFilter.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
