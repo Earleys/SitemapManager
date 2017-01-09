@@ -14,6 +14,11 @@ namespace SitemapManager.DAL.Data_Access
 {
     public class FileManager
     {
+        /// <summary>
+        /// Reads a sitemap (XML file) from the chosen path
+        /// </summary>
+        /// <param name="path">Path to a Sitemap XML file</param>
+        /// <returns>Returns a list of Sitemap elements</returns>
         public List<Sitemap> ReadSiteMap(string path)
         {
             try
@@ -66,7 +71,7 @@ namespace SitemapManager.DAL.Data_Access
         /// Generates a sitemap
         /// </summary>
         /// <param name="sitemapList"></param>
-        /// <returns>XElement</returns>
+        /// <returns>XElement or null on error</returns>
         public XElement GenerateSitemap(List<Sitemap> sitemapList)
         {
             XElement root = null;
@@ -107,11 +112,11 @@ namespace SitemapManager.DAL.Data_Access
         }
 
         /// <summary>
-        /// Attempts to generate and 
+        /// Attempts to save a sitemap element
         /// </summary>
         /// <param name="path"></param>
-        /// <param name="sitemapList"></param>
-        /// <returns></returns>
+        /// <param name="sitemapElements"></param>
+        /// <returns>Whether save was succesful</returns>
         public bool SaveSitemap(string path, XElement sitemapElements)
         {
             // if no elements were added
@@ -127,31 +132,15 @@ namespace SitemapManager.DAL.Data_Access
 
             return true;
 
-            //XNamespace xNamespaceInstance = "http://www.w3.org/2001/XMLSchema-instance";
-
-            //XDocument xDoc = new XDocument(
-            //      new XDeclaration("1.0", "UTF-8", "no"),
-            //new XElement(xNamespace + "urlset",
-            //new XAttribute(XNamespace.Xmlns + "xsi", xNamespaceInstance),
-            //new XAttribute(xNamespaceInstance + "schemaLocation",
-            //    "http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd")
-            //    ));
-
-
-            //foreach (var item in sitemapList)
-            //{
-            //    XElement root = new XElement("url");
-            //    root.Add(new XAttribute("loc", item.LocationUrl));
-            //    root.Add(new XAttribute("lastmod", item.LastModified));
-            //    root.Add(new XAttribute("changefreq", item.Frequency));
-            //    root.Add(new XAttribute("priority", item.Priority));
-            //}
-            //xDoc.Save(path);
-            //result = true;
         
 
         }
 
+        /// <summary>
+        /// Checks if the path is valid
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns>True if path is valid</returns>
     private bool IsValidPath(string path)
     {
         Regex driveCheck = new Regex(@"^[a-zA-Z]:\\$");

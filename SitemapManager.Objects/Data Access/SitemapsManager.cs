@@ -10,8 +10,17 @@ namespace SitemapManager.DAL.Data_Access
     public class SitemapsManager
     {
         //List<Sitemap> _sitemapList = new List<Sitemap>();
+        /// <summary>
+        /// List containing all sitemap elements
+        /// </summary>
         public List<Sitemap> SitemapList { get; set; }
+        /// <summary>
+        /// Contains (all) sitemap elements without duplicates
+        /// </summary>
         public List<Sitemap> SitemapListNoDuplicates { get; set; }
+        /// <summary>
+        /// Contains all filtered elements - this could be empty if nothing is filtered/found
+        /// </summary>
         public List<Sitemap> SitemapListFiltered { get; set; }
 
         public SitemapsManager()
@@ -30,11 +39,21 @@ namespace SitemapManager.DAL.Data_Access
             }
         }
 
+        /// <summary>
+        /// Gets all sitemap elements by URL
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns>Single sitemap element</returns>
         public Sitemap GetSitemapElementByUrl(string name)
         {
             return SitemapList.Where(x => x.LocationUrl.ToLower() == name.ToLower()).FirstOrDefault();
         }
 
+        /// <summary>
+        /// Add a sitemap element to the list
+        /// </summary>
+        /// <param name="sm"></param>
+        /// <returns>True if adding was succesful</returns>
         public bool SaveSitemapElement(Sitemap sm)
         {
             try
@@ -49,6 +68,11 @@ namespace SitemapManager.DAL.Data_Access
             }
         }
 
+        /// <summary>
+        /// Deletes a sitemap from the list
+        /// </summary>
+        /// <param name="sm"></param>
+        /// <returns>True if deletion was succesful</returns>
         public bool deleteSitemapElement(Sitemap sm)
         {
             try
@@ -63,6 +87,15 @@ namespace SitemapManager.DAL.Data_Access
             }
         }
 
+        /// <summary>
+        /// Runs filter command depending on chosen user settings
+        /// </summary>
+        /// <param name="source">The full sitemaplist, filters will be based on this list</param>
+        /// <param name="urlFilter">Url filter settings</param>
+        /// <param name="modificationDateFilter">Modification filter settings</param>
+        /// <param name="changeFrequencyFilter">Change frequency filter settings</param>
+        /// <param name="priorityFilter">Priority filter settings</param>
+        /// <returns>A custom sitemaplist containing all elements that apply to the chosen filter</returns>
         public List<Sitemap> Filter(List<Sitemap> source, UrlFilter urlFilter, ModificationDateFilter modificationDateFilter, ChangeFrequencyFilter changeFrequencyFilter, PriorityFilter priorityFilter)
         {
             List<Sitemap> temporaryFilteredSitemapList = new List<Sitemap>();
@@ -163,7 +196,7 @@ namespace SitemapManager.DAL.Data_Access
             }
 
             // after that go through the list again, and remove everything that does not fit one or more of the other filter settings.
-            // example: something added yesterday (mod. date) may have been added, but it may not have the correct name, 
+            // example: If you're filtering on modification date and a certain name, it could've been added because it fit the date, but the name may be incorrect, 
             // so by going through the list again it will get filtered out anyways.
             if (urlFilter.IsActive && urlFilter != null)
             {

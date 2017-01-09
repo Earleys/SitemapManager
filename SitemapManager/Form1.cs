@@ -35,6 +35,11 @@ namespace SitemapManager
             UpdatePriorityLabel();
         }
 
+        /// <summary>
+        /// Prompts user to pick a sitemap
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void loadSitemapToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog();
@@ -55,6 +60,10 @@ namespace SitemapManager
             ToggleFilteringTab(true);
         }
 
+        /// <summary>
+        /// Adds different nodes (treeview) with all sitemap elements
+        /// </summary>
+        /// <param name="sitemapList"></param>
         private void RefreshTreeView(List<Sitemap> sitemapList)
         {
             tvResults.Nodes.Clear();
@@ -128,6 +137,9 @@ namespace SitemapManager
             ApplyFiltering();
         }
 
+        /// <summary>
+        /// Applies filter
+        /// </summary>
         private void ApplyFiltering()
         {
             //merge filter list with normal list
@@ -161,6 +173,9 @@ namespace SitemapManager
             ApplyFilteringWhenValid();
         }
 
+        /// <summary>
+        /// Only applies filter if something is checked
+        /// </summary>
         private void ApplyFilteringWhenValid()
         {
             bool isAnythingChecked = groupBox1.Controls.OfType<CheckBox>().Any(c => c.Checked);
@@ -231,6 +246,9 @@ namespace SitemapManager
             }
         }
 
+        /// <summary>
+        /// Refreshes the treeview, applies filter if anything is checked and enables filter tab
+        /// </summary>
         private void FinalizeChanges()
         {
             RefreshTreeView(sitemapManager.SitemapList);
@@ -265,6 +283,10 @@ namespace SitemapManager
             FinalizeChanges();
         }
 
+        /// <summary>
+        /// Applies changes to all sitemap elements if the option is selected
+        /// </summary>
+        /// <param name="source"></param>
         private void ApplyChangesToAll(List<Sitemap> source)
         {
             using (var form = new ApplyChangesForm(source.Count))
@@ -302,6 +324,11 @@ namespace SitemapManager
             }
         }
 
+        /// <summary>
+        /// Prompts user to pick a save location
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void saveSitemapToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SaveFileDialog sfd = new SaveFileDialog();
