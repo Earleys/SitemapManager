@@ -79,7 +79,10 @@ namespace SitemapManager.DAL.Data_Access
             {
                 // http://rehansaeed.com/dynamically-generating-sitemap-xml-for-asp-net-mvc/
                 XNamespace xNamespace = "http://www.sitemaps.org/schemas/sitemap/0.9";
-                root = new XElement(xNamespace + "urlset");
+                XNamespace xNamespaceInstance = "http://www.w3.org/2001/XMLSchema-instance";
+                root = new XElement(xNamespace + "urlset",
+                    new XAttribute(XNamespace.Xmlns + "xsi", xNamespaceInstance),
+                    new XAttribute(xNamespaceInstance + "schemaLocation", "http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd"));
 
                 foreach (Sitemap sitemap in sitemapList)
                 {
