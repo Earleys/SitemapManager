@@ -6,6 +6,7 @@ using System.Collections;
 using System.Linq;
 using SitemapManager.DAL.Data_Access;
 using SitemapManager.DAL.Entities;
+using System.Xml.Linq;
 
 namespace SitemapManager.Tests
 {
@@ -57,6 +58,40 @@ namespace SitemapManager.Tests
 
             // Assert: Tests if the newly added sitemap is equal to the pre-made file
             Assert.AreEqual(true, CheckForEquality(expectedListResult.FirstOrDefault(), sitemapList.FirstOrDefault()));
+        }
+
+        /// <summary>
+        /// Tests if generated sitemap objects are equal to how it should be (without taking account header stuff)
+        /// </summary>
+        [TestMethod]
+        public void CanGenerateEqualSitemapObject()
+        {
+            // Arrange: Make a copy of the pre-made example sitemap
+            List<Sitemap> originalSitemapList = fileManager.ReadSiteMap(testSitemapPath);
+
+            // Act: Generate a sitemap 
+            XElement elements = fileManager.GenerateSitemap(originalSitemapList);
+            sitemapList = fileManager.ReadSiteMap(elements.ToString());
+
+            // Assert: Checks if a random entity of the pre-made sitemap is equal to a random entity of the original one
+            Assert.AreEqual(originalSitemapList.FirstOrDefault().LocationUrl, sitemapList.FirstOrDefault().LocationUrl);
+        }
+
+        /// <summary>
+        /// Tests if generated sitemap objects generate all/multiple items and not just 1
+        /// </summary>
+        [TestMethod]
+        public void CanGenerateAsManySitemapObject()
+        {
+            // Arrange: Make a copy of the pre-made example sitemap
+            List<Sitemap> originalSitemapList = fileManager.ReadSiteMap(testSitemapPath);
+
+            // Act: Generate a sitemap 
+            XElement elements = fileManager.GenerateSitemap(originalSitemapList);
+            sitemapList = fileManager.ReadSiteMap(elements.ToString());
+
+            // Assert: Checks if the pre-made sitemap contains more than 1 item
+            Assert.AreEqual(2, sitemapList.Count());
         }
 
         /// <summary>
