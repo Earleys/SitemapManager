@@ -72,10 +72,6 @@
       <Project>{D864D9F1-36B6-45B0-961E-76C088CD7FCB}</Project>
       <Name>SitemapManager.DAL</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SitemapManager\SitemapManager.UI.csproj">
-      <Project>{7532d562-62b3-4ad1-b83d-73c88e16b2d4}</Project>
-      <Name>SitemapManager.UI</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -86,7 +86,10 @@
             this.chkFilterUrl = new System.Windows.Forms.CheckBox();
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.newSitemapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadSitemapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveSitemapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveSitemapAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.orderByToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.urlToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -94,7 +97,8 @@
             this.prioritylowHighToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.priorityhighLowToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.saveSitemapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.warnWhenDeletingItemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -750,18 +754,41 @@
             // fileToolStripMenuItem
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.newSitemapToolStripMenuItem,
             this.loadSitemapToolStripMenuItem,
-            this.saveSitemapToolStripMenuItem});
+            this.saveSitemapToolStripMenuItem,
+            this.saveSitemapAsToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "&File";
             // 
+            // newSitemapToolStripMenuItem
+            // 
+            this.newSitemapToolStripMenuItem.Name = "newSitemapToolStripMenuItem";
+            this.newSitemapToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.newSitemapToolStripMenuItem.Text = "New Sitemap";
+            this.newSitemapToolStripMenuItem.Click += new System.EventHandler(this.newSitemapToolStripMenuItem_Click);
+            // 
             // loadSitemapToolStripMenuItem
             // 
             this.loadSitemapToolStripMenuItem.Name = "loadSitemapToolStripMenuItem";
-            this.loadSitemapToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.loadSitemapToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
             this.loadSitemapToolStripMenuItem.Text = "&Load Sitemap";
             this.loadSitemapToolStripMenuItem.Click += new System.EventHandler(this.loadSitemapToolStripMenuItem_Click);
+            // 
+            // saveSitemapToolStripMenuItem
+            // 
+            this.saveSitemapToolStripMenuItem.Name = "saveSitemapToolStripMenuItem";
+            this.saveSitemapToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.saveSitemapToolStripMenuItem.Text = "Save Sitemap";
+            this.saveSitemapToolStripMenuItem.Click += new System.EventHandler(this.saveSitemapToolStripMenuItem_Click);
+            // 
+            // saveSitemapAsToolStripMenuItem
+            // 
+            this.saveSitemapAsToolStripMenuItem.Name = "saveSitemapAsToolStripMenuItem";
+            this.saveSitemapAsToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.saveSitemapAsToolStripMenuItem.Text = "Save Sitemap as...";
+            this.saveSitemapAsToolStripMenuItem.Click += new System.EventHandler(this.saveSitemapAsToolStripMenuItem_Click);
             // 
             // viewToolStripMenuItem
             // 
@@ -777,7 +804,7 @@
             this.urlToolStripMenuItem,
             this.priorityhighLowToolStripMenuItem});
             this.orderByToolStripMenuItem.Name = "orderByToolStripMenuItem";
-            this.orderByToolStripMenuItem.Size = new System.Drawing.Size(120, 22);
+            this.orderByToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.orderByToolStripMenuItem.Text = "Order by";
             // 
             // urlToolStripMenuItem
@@ -814,19 +841,30 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
-            this.viewToolStripMenuItem});
+            this.viewToolStripMenuItem,
+            this.settingsToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(778, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
-            // saveSitemapToolStripMenuItem
+            // settingsToolStripMenuItem
             // 
-            this.saveSitemapToolStripMenuItem.Name = "saveSitemapToolStripMenuItem";
-            this.saveSitemapToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.saveSitemapToolStripMenuItem.Text = "Save Sitemap";
-            this.saveSitemapToolStripMenuItem.Click += new System.EventHandler(this.saveSitemapToolStripMenuItem_Click);
+            this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.warnWhenDeletingItemsToolStripMenuItem});
+            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
+            this.settingsToolStripMenuItem.Text = "Settings";
+            // 
+            // warnWhenDeletingItemsToolStripMenuItem
+            // 
+            this.warnWhenDeletingItemsToolStripMenuItem.Checked = true;
+            this.warnWhenDeletingItemsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.warnWhenDeletingItemsToolStripMenuItem.Name = "warnWhenDeletingItemsToolStripMenuItem";
+            this.warnWhenDeletingItemsToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.warnWhenDeletingItemsToolStripMenuItem.Text = "Warn when deleting items";
+            this.warnWhenDeletingItemsToolStripMenuItem.Click += new System.EventHandler(this.warnWhenDeletingItemsToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -934,6 +972,10 @@
         private System.Windows.Forms.CheckBox chkFilterPriorityAt;
         private System.Windows.Forms.CheckBox chkFilterModificationDateAt;
         private System.Windows.Forms.ToolStripMenuItem saveSitemapToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem newSitemapToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveSitemapAsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem warnWhenDeletingItemsToolStripMenuItem;
     }
 }
 

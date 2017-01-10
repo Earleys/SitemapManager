@@ -21,9 +21,9 @@ namespace SitemapManager.DAL.Data_Access
         /// <returns>Returns a list of Sitemap elements</returns>
         public List<Sitemap> ReadSiteMap(string path)
         {
+            List<Sitemap> smList = new List<Sitemap>();
             try
             {
-                List<Sitemap> smList = new List<Sitemap>();
                 FileStream fs = null;
                 XDocument xDoc = null;
                 if (IsValidPath(path))
@@ -58,13 +58,13 @@ namespace SitemapManager.DAL.Data_Access
                     smList.Add(sm);
                 }
 
-                return smList;
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Error when reading sitemap: " + ex.Message);
-                throw;
+                //throw;
             }
+            return smList;
         }
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace SitemapManager.DAL.Data_Access
 
                         sitemap.LastModified == null ? null : new XElement(      // lastModified
                             xNamespace + "lastmod",
-                            sitemap.LastModified.ToLocalTime().ToString("yyyy-MM-ddTHH:mm:sszzz")),
+                            sitemap.LastModified.ToLocalTime().ToString("yyyy-MM-dd")),
 
                         new XElement(    //changeFreq
                             xNamespace + "changefreq",

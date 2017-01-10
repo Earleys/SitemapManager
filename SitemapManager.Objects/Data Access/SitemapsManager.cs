@@ -50,7 +50,7 @@ namespace SitemapManager.DAL.Data_Access
         }
 
         /// <summary>
-        /// Add a sitemap element to the list
+        /// Add a sitemap element to the list - Url has to be unique and not empty
         /// </summary>
         /// <param name="sm"></param>
         /// <returns>True if adding was succesful</returns>
@@ -58,8 +58,16 @@ namespace SitemapManager.DAL.Data_Access
         {
             try
             {
-                SitemapList.Add(sm);
-                return true;
+                if (isUrlUnique(sm.LocationUrl) && sm.LocationUrl != null && sm.LocationUrl != "")
+                {
+                    SitemapList.Add(sm);
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+
             }
             catch (Exception)
             {
@@ -85,6 +93,23 @@ namespace SitemapManager.DAL.Data_Access
                 Console.WriteLine("Error when deleting sitemap element");
                 return false;
             }
+        }
+
+        /// <summary>
+        /// Returns whether the item already exists in the list
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns>True if the item does NOT exist yet</returns>
+        public bool isUrlUnique(string url)
+        {
+            foreach (var item in SitemapList)
+            {
+                if (item.LocationUrl.ToLower() == url.ToLower())
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         /// <summary>

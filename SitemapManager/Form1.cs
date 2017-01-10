@@ -22,7 +22,8 @@ namespace SitemapManager
         ThreadStart filterThreadStart;
 
         private bool isFiltered = false;
-        private string lastPath = "";
+        private bool isAnyUnsavedChanges = false;
+        private string lastPath = null;
 
         public Form1()
         {
@@ -33,6 +34,7 @@ namespace SitemapManager
             filterThread = new Thread(filterThreadStart);
             ToggleFilteringTab(false);
             UpdatePriorityLabel();
+            warnWhenDeletingItemsToolStripMenuItem.Checked = SitemapManager.UI.Properties.Settings.Default.DeleteItemsWarning;
         }
 
         /// <summary>
@@ -42,6 +44,7 @@ namespace SitemapManager
         /// <param name="e"></param>
         private void loadSitemapToolStripMenuItem_Click(object sender, EventArgs e)
         {
+
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Title = "Select a sitemap.";
             ofd.Filter = "XML File|*.xml";
@@ -49,13 +52,30 @@ namespace SitemapManager
             if (ofd.ShowDialog() == DialogResult.OK)
             {
                 path = ofd.FileName;
-                lastPath = path;
+              
             }
 
             if (path != null)
             {
+                if (isAnyUnsavedChanges)
+                {
+                    DialogResult dr = PromptSaveChanges();
+                    if (dr == DialogResult.Cancel)
+                    {
+                        return;
+                    }
+                }
+
+                
                 sitemapManager.SitemapList = fileManager.ReadSiteMap(path);
+                if (sitemapManager.SitemapList.Count() == 0)
+                {
+                    MessageBox.Show("This file appears to be empty or invalid. Make sure you are loading the correct XML file, or create a new XML file.", "Sitemap could not be loaded", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
             }
+            lastPath = path; // set the last used path here, after making sure the previous changes were saved or cancelled
+            isAnyUnsavedChanges = false;
             RefreshTreeView(sitemapManager.SitemapList);
             ToggleFilteringTab(true);
         }
@@ -101,7 +121,8 @@ namespace SitemapManager
             UpdatePriorityLabel();
         }
 
-        private string GetPriority(double priority) {
+        private string GetPriority(double priority)
+        {
             return String.Format("{0:0.0}", priority);
         }
 
@@ -166,7 +187,7 @@ namespace SitemapManager
             lblStatus.Text = "Showing " + sitemapManager.SitemapListFiltered.Count().ToString() + " items out of " + sitemapManager.SitemapList.Count().ToString() + " total items.";
         }
 
-        
+
 
         private void chkFilterUrl_CheckedChanged(object sender, EventArgs e)
         {
@@ -207,8 +228,35 @@ namespace SitemapManager
             sm.Frequency = (ChangeFrequency)cmbFrequency.SelectedValue;
             double convertedPriorityValue = Convert.ToDouble(tbPriority.Value) / 10;
             sm.Priority = Convert.ToDouble(GetPriority(convertedPriorityValue));
-            sitemapManager.SaveSitemapElement(sm);
+
+            if (sm.LocationUrl == null || sm.LocationUrl == "")
+            {
+                MessageBox.Show("URL should not be empty. Please fill in a url.", "Unable to add item", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                lblStatus.Text = "Error when adding item. URL field is empty. Nothing has been added.";
+                return;
+            }
+
+            if (!sitemapManager.SaveSitemapElement(sm))
+            {
+                MessageBox.Show("Error when adding item. Make sure the URL field is unique!", "Unable to add item", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                lblStatus.Text = "Error when adding item. URL not unique. Nothing has been added.";
+                return;
+            }
+            ResetManageUserFields();
             FinalizeChanges();
+
+
+        }
+
+        /// <summary>
+        /// Rests all fields in the Manage tab back to their default value (empty or 0)
+        /// </summary>
+        private void ResetManageUserFields()
+        {
+            txtUrl.Text = "";
+            cmbFrequency.SelectedIndex = 0;
+            tbPriority.Value = 1;
+            dtpLastModified.Value = DateTime.Now;
         }
 
 
@@ -217,13 +265,25 @@ namespace SitemapManager
             if (tvResults.SelectedNode != null)
             {
                 Sitemap sm = sitemapManager.GetSitemapElementByUrl(tvResults.SelectedNode.Name);
+                string original = sm.LocationUrl;
                 sm.LocationUrl = txtUrl.Text;
-                sm.LastModified = dtpLastModified.Value;
-                sm.Frequency = (ChangeFrequency)cmbFrequency.SelectedValue;
-                double convertedPriorityValue = Convert.ToDouble(tbPriority.Value) / 10;
-                sm.Priority = Convert.ToDouble(GetPriority(convertedPriorityValue));
-                FinalizeChanges();
-            } else
+                if (sitemapManager.isUrlUnique(txtUrl.Text) && txtUrl.Text != "" && txtUrl.Text != null)
+                {
+                    sm.LastModified = dtpLastModified.Value;
+                    sm.Frequency = (ChangeFrequency)cmbFrequency.SelectedValue;
+                    double convertedPriorityValue = Convert.ToDouble(tbPriority.Value) / 10;
+                    sm.Priority = Convert.ToDouble(GetPriority(convertedPriorityValue));
+                    FinalizeChanges();
+                    ResetManageUserFields();
+                } else
+                {
+                    sm.LocationUrl = original;
+                    MessageBox.Show("Error when editing item. Make sure the URL field is unique and not empty! The changes have been reverted.", "Unable to edit item", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    lblStatus.Text = "Error when editing item. URL not empty or unique. Changes are reverted.";
+                }
+
+            }
+            else
             {
                 MessageBox.Show("Unable to make changes. Please select an item from the list first.", "Cannot apply changes", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -233,17 +293,29 @@ namespace SitemapManager
         {
             if (tvResults.SelectedNode != null)
             {
+                if (!warnWhenDeletingItemsToolStripMenuItem.Checked)
+                {
+                    GetAndDeleteSitemapItem();
+                    FinalizeChanges();
+                    return;
+                }
                 DialogResult dr = MessageBox.Show("Are you sure you want to delete '" + tvResults.SelectedNode.Name + "' and all of it's child elements completely?", "Are you sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (dr == DialogResult.Yes)
                 {
-                    Sitemap sm = sitemapManager.GetSitemapElementByUrl(tvResults.SelectedNode.Name);
-                    sitemapManager.deleteSitemapElement(sm);
+                    GetAndDeleteSitemapItem();
                     FinalizeChanges();
                 }
-            } else
+            }
+            else
             {
                 MessageBox.Show("Unable to delete. Please select an item from the list first.", "Cannot delete", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void GetAndDeleteSitemapItem()
+        {
+            Sitemap sm = sitemapManager.GetSitemapElementByUrl(tvResults.SelectedNode.Name);
+            sitemapManager.deleteSitemapElement(sm);
         }
 
         /// <summary>
@@ -254,6 +326,7 @@ namespace SitemapManager
             RefreshTreeView(sitemapManager.SitemapList);
             ApplyFilteringWhenValid();
             ToggleFilteringTab(true);
+            isAnyUnsavedChanges = true;
         }
 
         private void ToggleFilteringTab(bool value)
@@ -331,6 +404,20 @@ namespace SitemapManager
         /// <param name="e"></param>
         private void saveSitemapToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (lastPath != null)
+            {
+                Save(lastPath);
+            }
+            else
+            {
+                PromptSaveWindow();
+
+            }
+
+        }
+
+        private void PromptSaveWindow()
+        {
             SaveFileDialog sfd = new SaveFileDialog();
             sfd.Filter = "XML File|*.xml";
             sfd.Title = "Choose where to save the sitemap.";
@@ -341,10 +428,78 @@ namespace SitemapManager
             if (sfd.ShowDialog() == DialogResult.OK)
             {
                 lastPath = sfd.FileName;
-                var result = fileManager.GenerateSitemap(sitemapManager.SitemapList);
-                fileManager.SaveSitemap(sfd.FileName, result);
+                Save(lastPath);
+            }
+        }
+
+        private void Save(string path)
+        {
+            var result = fileManager.GenerateSitemap(sitemapManager.SitemapList);
+            fileManager.SaveSitemap(path, result);
+        }
+
+        private void newSitemapToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (isAnyUnsavedChanges)
+            {
+                DialogResult dr = PromptSaveChanges();
+                if (dr == DialogResult.Cancel)
+                {
+
+                } else
+                {
+                    sitemapManager = new SitemapsManager();
+                    lastPath = null;
+                    lblStatus.Text = "New project has been created.";
+                    FinalizeChanges();
+                }
+            }
+        }
+
+        private DialogResult PromptSaveChanges()
+        {
+            DialogResult dr = MessageBox.Show("You may have unsaved changes. Do you want to save first?", "Unsaved changes", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+            if (dr == DialogResult.Yes)
+            {
+                if (lastPath != null)
+                {
+                    Save(lastPath);
+                }
+                else
+                {
+                    PromptSaveWindow();
+                }
+            }
+            else if (dr == DialogResult.Cancel)
+            {
+                return DialogResult.Cancel;
             }
 
+            // Assume no saving/continue if nothing happens
+            return DialogResult.No;
+
+
+
+        }
+
+        private void saveSitemapAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PromptSaveWindow();
+        }
+
+        private void warnWhenDeletingItemsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (warnWhenDeletingItemsToolStripMenuItem.Checked == true)
+            {
+                warnWhenDeletingItemsToolStripMenuItem.Checked = false;
+                SitemapManager.UI.Properties.Settings.Default.DeleteItemsWarning = false;
+            } else
+            {
+                warnWhenDeletingItemsToolStripMenuItem.Checked = true;
+                SitemapManager.UI.Properties.Settings.Default.DeleteItemsWarning = true;
+
+            }
+            SitemapManager.UI.Properties.Settings.Default.Save();
         }
     }
 }

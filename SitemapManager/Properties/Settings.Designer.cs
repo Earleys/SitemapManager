@@ -22,5 +22,17 @@ namespace SitemapManager.UI.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool DeleteItemsWarning {
+            get {
+                return ((bool)(this["DeleteItemsWarning"]));
+            }
+            set {
+                this["DeleteItemsWarning"] = value;
+            }
+        }
     }
 }
